@@ -219,6 +219,7 @@ function showForumTopics() {
     var submitbutton = $("<button class='btn-class'>Submit</button>");
     var topicTable = $("<table class='steelBlueCols'><tr><th>Title</th><th>posts</th></tr></table>");
     var count = 0;
+    topics = JSON.parse(localStorage.getItem("topics"));
     for (index in topics) {
         console.log(topics[index].title);
         var row = $("<tr id='row" + count + "><'/tr>");
@@ -231,8 +232,6 @@ function showForumTopics() {
     page.append(topicTable);
     page.append("<label>Topic Title:</></br>")
     page.append("<input id='inputTitle'/></br>");
-    page.append("<label> Topic posts:</></br>")
-    page.append("<input id='inputTopicPosts'/></br>");
     page.append(submitbutton);
     submitbutton.on("click", function () {
         addTopic();
@@ -273,12 +272,28 @@ function showSingleTopic(topicDetails) {
 
 function addTopic() {
     var title = $("#inputTitle").val();
-    var posts = $("#inputTopicPosts").val();
-    topics.push({
-        title: title
-        , posts: posts
-    });
+    var posts = 0;
+    if (topics == null) {
+        topics = [];
+        topics.push({
+            title: title
+            , posts: posts
+            , id: 1
+        });
+    }
+    else {
+        topics.push({
+            title: title
+            , posts: posts
+            , id: topics[topics.length - 1] + 1
+        });
+    }
+    localStorage.setItem("topics", JSON.stringify(topics));
     showForumTopics();
+}
+
+function clearTopics() {
+    localStorage.setItem("topics", JSON.stringify([]));
 }
 
 function goToHomePage() {
@@ -292,6 +307,5 @@ $(document).ready(function () {
     $("#registerbutton").on("click", showRegistrationPage);
     $("#MainPagebutton").on("click", showForumTopics);
     showForumTopics();
-    $("#row0").on("click", showUserContent);
     //now show the Forum Topics
 });
