@@ -54,13 +54,13 @@ var topics = [
         , posts: 5
     }
 ];
-var userContent = [
+var topicContent = [
     {
-        user: "Student Topic"
+        user: "manko111"
         , content: 14
     }
     , {
-        user: "Other Topics"
+        user: "manko222"
         , content: 5
     }
 ];
@@ -181,6 +181,13 @@ function createTopicOnclick(node, topic) {
     });
 }
 
+function createTopicContentOnclick(node, topic) {
+    console.log("createTopicContentOnclick");
+    node.on("click", function () {
+        goToHomePage();
+    });
+}
+
 function showTopocTable() {
     console.log("running showRegistrationPage()");
     var page = $("<div></div>");
@@ -233,32 +240,35 @@ function showForumTopics() {
     $("#maincontent").html(page);
 }
 
-function showUserContent() {
+function showUserContent(topicDetails) {
     var page = $("<div></div>");
-    page.append("<h1>ContentTopic</h1>");
-    var topicTable = $("<table class='Topicstable'><tr><th>Title</th><th>posts</th></tr></table>");
+    page.append("<h1>ContentTopic:" + topicDetails.title + "</h1>");
+    var submitReplybutton = $("<button id='submitReplybutton' class='btn-class'>Submit Replys</button>");
+    var gobackButton = $("<button id='gobackButton' class='btn-class'>Go To Topic Page</button>");
+    var topicTable = $("<table class='Topicstable'><tr><th>User</th><th>RepliesContent</th></tr></table>");
     var count = 0;
-    for (index in userContent) {
-        console.log(userContent[index].title);
-        var row = $("<tr id='" + count + "><'/tr>");
-        row.append("<td>" + userContent[index].user + "</td>");
-        row.append("<td>" + userContent[index].content + "</td>");
-        createTopicOnclick(row, userContent[index]);
+    for (index in topicContent) {
+        console.log(topicContent[index].title);
+        var row = $("<tr id='content" + count + "><'/tr>");
+        row.append("<td>" + topicContent[index].user + "</td>");
+        row.append("<td>" + topicContent[index].content + "</td>")
+        createTopicContentOnclick(row, topicContent[index]);
         count++;
         topicTable.append(row);
         $("#maincontent").html(page);
     }
     page.append(topicTable);
-    page.append("<label>Topic Title:</></br>")
-    page.append("<input id='inputTitle'/></br>");
-    page.append("<label> Topic posts:</></br>")
-    page.append("<input id='inputTopicPosts'/></br>");
+    page.append("<label>Reply Content:</></br>")
+    page.append("<input id='inputReplyContent'/></br>");
+    page.append(submitReplybutton);
+    page.append(gobackButton);
     $("#maincontent").html(page);
+    $("#gobackButton").on("click", showForumTopics);
 }
 //*******************************************************************************************
 //*******************************************************************************************
 function showSingleTopic(topicDetails) {
-    alert(topicDetails.title);
+    showUserContent(topicDetails);
 }
 
 function addTopic() {
@@ -268,6 +278,10 @@ function addTopic() {
         title: title
         , posts: posts
     });
+    showForumTopics();
+}
+
+function goToHomePage() {
     showForumTopics();
 }
 //*****************************************************************
