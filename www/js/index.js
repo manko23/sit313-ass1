@@ -269,12 +269,12 @@ function showUserContent(topicDetails) {
     $("#gobackButton").on("click", showForumTopics);
 	$("#submitReplybutton").on("click",function(){
 		if(loginCheck()){
-		topicDetails.posts +=1;
 		var topicContent = new Object();
 		topicContent.userName = localStorage.getItem("logedUsername");
 		topicContent.content = $("#inputReplyContent").val();
-		saveDataToIntrotoApp('topic'+topicDetails.id+'reply-'+topicDetails.posts,JSON.stringify(topicContent),topicDetails);
-		localStorage.setItem("topics",JSON.stringify(topics));
+		var timestam= dateToString(new Date());
+		console.log(timestam);
+		saveDataToIntrotoApp('topic'+topicDetails.id+'reply-'+topicContent.userName+timestam,JSON.stringify(topicContent),topicDetails);
 		}
 		
 	});
@@ -305,6 +305,32 @@ function addTopic() {
     showForumTopics();
 }
 
+function dateToString(now){  
+    var year = now.getFullYear();  
+    var month =(now.getMonth() + 1).toString();  
+    var day = (now.getDate()).toString();  
+    var hour = (now.getHours()).toString();  
+    var minute = (now.getMinutes()).toString();  
+    var second = (now.getSeconds()).toString();  
+    if (month.length == 1) {  
+        month = "0" + month;  
+    }  
+    if (day.length == 1) {  
+        day = "0" + day;  
+    }  
+    if (hour.length == 1) {  
+        hour = "0" + hour;  
+    }  
+    if (minute.length == 1) {  
+        minute = "0" + minute;  
+    }  
+    if (second.length == 1) {  
+        second = "0" + second;  
+    }  
+     var dateTime = year +  month +  day + hour +minute+second;  
+     return dateTime;  
+  }  
+
 
 function  saveDataToIntrotoApp(objectid,data,topicDetails){
 	var url = "http://introtoapps.com/datastore.php";
@@ -318,7 +344,9 @@ function  saveDataToIntrotoApp(objectid,data,topicDetails){
                                         },
                                         success: function (data) {
 											if(data == 'ok'){
-												alert("reply success");
+												topicDetails.posts +=1;
+												localStorage.setItem("topics",JSON.stringify(topics));
+												alert("reply success,page is refreshing");
 												showUserContent(topicDetails);
 											}else{
 												alert("reply failed");
