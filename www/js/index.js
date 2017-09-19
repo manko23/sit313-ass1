@@ -44,15 +44,7 @@ app.initialize();
 // varlables
 //*****************************************************************
 var topics = [
-    {
-        title: "Student Topic"
-        , posts: 14
-        , replies: []
-    }
-    , {
-        title: "Other Topics"
-        , posts: 5
-    }
+ 
 ];
 var topicContent = [
     {
@@ -263,6 +255,10 @@ function showUserContent(topicDetails) {
     page.append(gobackButton);
     $("#maincontent").html(page);
     $("#gobackButton").on("click", showForumTopics);
+	$("#submitReplybutton").on("click",function(){
+		topicDetails.posts +=1;
+		localStorage.setItem("topics",JSON.stringify(topics));
+	});
 }
 //*******************************************************************************************
 //*******************************************************************************************
@@ -273,21 +269,19 @@ function showSingleTopic(topicDetails) {
 function addTopic() {
     var title = $("#inputTitle").val();
     var posts = 0;
+	var id 
     if (topics == null) {
-        topics = [];
+		topics = [];
+        id = 1;
+    }else{
+		lastId = topics[topics.length-1].id;
+		id = lastId + 1;
+	}
         topics.push({
             title: title
             , posts: posts
-            , id: 1
+            , id: id
         });
-    }
-    else {
-        topics.push({
-            title: title
-            , posts: posts
-            , id: topics[topics.length - 1] + 1
-        });
-    }
     localStorage.setItem("topics", JSON.stringify(topics));
     showForumTopics();
 }
