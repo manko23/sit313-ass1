@@ -246,14 +246,18 @@ function showUserContent(topicDetails) {
     var gobackButton = $("<button id='gobackButton' class='btn-class'>Go To Topic Page</button>");
     var topicTable = $("<table class='Topicstable'><tr><th>User</th><th>RepliesContent</th></tr></table>");
     var count = 0;
-    for (index in topicContent) {
-        console.log(topicContent[index].title);
-        var row = $("<tr id='content" + count + "><'/tr>");
-        row.append("<td>" + topicContent[index].user + "</td>");
-        row.append("<td>" + topicContent[index].content + "</td>")
-        createTopicContentOnclick(row, topicContent[index]);
+	var objectids = getListObejctIdFromIntrotoApp('topic'+topicDetails.id+'reply-');
+    for (index in objectids) {
+        console.log(loadDataByObejctId(objectids[index]));
+		var dataObject = JSON.parse(loadDataByObejctId(objectids[index]));
+		if(dataObject != null){
+			var row = $("<tr id='content" + count + "><'/tr>");
+        row.append("<td>" + dataObject.userName + "</td>");
+        row.append("<td>" + dataObject.content + "</td>")
         count++;
         topicTable.append(row);
+		}
+        
         $("#maincontent").html(page);
     }
     page.append(topicTable);
@@ -269,7 +273,7 @@ function showUserContent(topicDetails) {
 		var topicContent = new Object();
 		topicContent.userName = localStorage.getItem("logedUsername");
 		topicContent.content = $("#inputReplyContent").val();
-		saveDataToIntrotoApp('topic'+topicDetails.id+'reply-'+topicDetails.posts,JSON.stringify(topicContent));
+		saveDataToIntrotoApp('topic'+topicDetails.id+'reply-'+topicDetails.posts,JSON.stringify(topicContent),topicDetails);
 		localStorage.setItem("topics",JSON.stringify(topics));
 		}
 		
@@ -302,7 +306,7 @@ function addTopic() {
 }
 
 
-function  saveDataToIntrotoApp(objectid,data){
+function  saveDataToIntrotoApp(objectid,data,topicDetails){
 	var url = "http://introtoapps.com/datastore.php";
 	var param = {objectid:objectid,data:data,appid:'214077752',action:'save'};
 	jQuery.ajax({
@@ -314,14 +318,54 @@ function  saveDataToIntrotoApp(objectid,data){
                                         },
                                         success: function (data) {
 											if(data == 'ok'){
-												return true;
 												alert("reply success");
+												showUserContent(topicDetails);
 											}else{
-												return false;
+												alert("reply failed");
 											}
 
                                         }
                                     });
+}
+
+
+function getListObejctIdFromIntrotoApp(prefix){
+	var url = "http://introtoapps.com/datastore.php";
+	var param = {prefix:prefix,appid:'214077752',action:'listall'};
+	var result = [];
+	jQuery.ajax({
+                                        type: "GET",
+                                        url: url,
+                                        data:param,
+										async: false,
+                                        error: function () {
+                                            alert("network false");
+                                        },
+                                        success: function (data) {
+											result = data;
+                                        }
+                                    });
+	return result;
+}
+
+
+function loadDataByObejctId(objectid){
+	var url = "http://introtoapps.com/datastore.php";
+	var param = {objectid:objectid,appid:'214077752',action:'load'};
+	var result;
+	 jQuery.ajax({
+                                        type: "GET",
+                                        url: url,
+                                        data:param,
+										async: false,
+                                        error: function () {
+                                            alert("network false");
+                                        },
+                                        success: function (data) {
+											result = data;
+                                        }
+                                    });
+	return result;
 }
 
 
