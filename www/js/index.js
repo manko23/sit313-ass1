@@ -102,8 +102,8 @@ function showloginPage() {
 }
 //Login method
 function loginWithUserNameAndPassword(username, password) {
-    alert(localStorage.getItem(username));
-    alert(password);
+    console.log(localStorage.getItem(username));
+    console.log(password);
     if (localStorage.getItem(username) == password) {
         localStorage.setItem("logedUsername", username);
         showForumTopics();
@@ -115,9 +115,14 @@ function loginWithUserNameAndPassword(username, password) {
 }
 
 function loginCheck() {
-    if (localStorage.getItem("logedUsername") == "-1") {
+    if (localStorage.getItem("logedUsername") == "-1" ||localStorage.getItem("logedUsername")==null) {
         showloginPage();
-    }
+		alert("login required to do this operation");
+		return false;
+    }else{
+		return true;
+	}
+	
 }
 //**************************************************************************
 // ******************************************************************************/
@@ -226,7 +231,10 @@ function showForumTopics() {
     page.append("<input id='inputTitle'/></br>");
     page.append(submitbutton);
     submitbutton.on("click", function () {
-        addTopic();
+		if(loginCheck()){
+		 addTopic();
+		}
+		
     });
     $("#maincontent").html(page);
 }
@@ -256,8 +264,15 @@ function showUserContent(topicDetails) {
     $("#maincontent").html(page);
     $("#gobackButton").on("click", showForumTopics);
 	$("#submitReplybutton").on("click",function(){
+		if(loginCheck()){
 		topicDetails.posts +=1;
+		var topicContent = new Object();
+		topicContent.userName = localStorage.getItem("logedUsername");
+		topicContent.content = $("#inputReplyContent").val();
+		saveDataToIntrotoApp('topic'+topicDetails.id+'reply-'+topicDetails.posts,JSON.stringify(topicContent));
 		localStorage.setItem("topics",JSON.stringify(topics));
+		}
+		
 	});
 }
 //*******************************************************************************************
@@ -285,6 +300,31 @@ function addTopic() {
     localStorage.setItem("topics", JSON.stringify(topics));
     showForumTopics();
 }
+
+
+function  saveDataToIntrotoApp(objectid,data){
+	var url = "http://introtoapps.com/datastore.php";
+	var param = {objectid:objectid,data:data,appid:'214077752',action:'save'};
+	jQuery.ajax({
+                                        type: "GET",
+                                        url: url,
+                                        data:param,
+                                        error: function () {
+                                            alert("network false");
+                                        },
+                                        success: function (data) {
+											if(data == 'ok'){
+												return true;
+												alert("reply success");
+											}else{
+												return false;
+											}
+
+                                        }
+                                    });
+}
+
+
 
 function clearTopics() {
     localStorage.setItem("topics", JSON.stringify([]));
