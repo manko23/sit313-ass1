@@ -286,11 +286,9 @@ function showSingleTopic(topicDetails) {
 }
 
 function addTopic() {
-	var SHA256 =require("crypto-js/sha256");
-	console.log(SHA256("Message"));
     var title = $("#inputTitle").val();
     var posts = 0;
-	var id;
+	var id 
     if (topics == null) {
 		topics = [];
         id = 1;
