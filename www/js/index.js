@@ -102,9 +102,13 @@ function showloginPage() {
 }
 //Login method-User login in the app and keep the login status
 function loginWithUserNameAndPassword(username, password) {
-    console.log(localStorage.getItem(username));
-    console.log(password);
-    if (localStorage.getItem(username) == password) {
+   
+   
+   cryptoStoredPassword = localStorage.getItem(username);
+   if(   cryptoStoredPassword == null){
+		  alert("login failed,user name not registed");
+   }else{
+	   if (   cryptoStoredPassword.toString() == CryptoJS.SHA256(password).toString()) {
         localStorage.setItem("logedUsername", username);
         showForumTopics();
         alert("login success");
@@ -112,6 +116,9 @@ function loginWithUserNameAndPassword(username, password) {
     else {
         alert("login failed,username password not match");
     }
+   }
+   
+    
 }
 
 //This method is to protect some methods that are required to login
@@ -170,7 +177,9 @@ function registorAction(username, password, confirmPassword) {
         alert("regist failed,password not match confirmPassword");
         return;
     }
-    localStorage.setItem(username, password);
+	cryptoPassword = CryptoJS.SHA256(password);
+
+    localStorage.setItem(username,cryptoPassword);
     alert("regist success");
 }
 
@@ -290,7 +299,9 @@ function showSingleTopic(topicDetails) {
 function addTopic() {
     var title = $("#inputTitle").val();
     var posts = 0;
-	var id 
+	var id;
+	
+
     if (topics == null) {
 		topics = [];
         id = 1;
