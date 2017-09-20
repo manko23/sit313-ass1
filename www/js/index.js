@@ -86,18 +86,7 @@ function showloginPage() {
         $("#maincontent").html(page);
     }
     else {
-        var page = $("<div></div>");
-        page.append("<h1>Profiles:</h1>");
-        var usernameLine = $("<p>Username: " + localStorage.getItem("logedUsername") + "</p>");
-        page.append(usernameLine);
-        var logoutbutton = $("<button>Logout</button>");
-        page.append(logoutbutton);
-        logoutbutton.on("click", function () {
-            localStorage.removeItem("logedUsername");
-            showloginPage();
-            console.log("logging in");
-        });
-        $("#maincontent").html(page);
+        showProfilePage();
     }
 }
 //Login method-User login in the app and keep the login status
@@ -183,6 +172,94 @@ function registorAction(username, password, confirmPassword) {
     alert("regist success");
 }
 
+function showProfilePage(){
+	var page = $("<div></div>");
+        page.append("<h1>Profiles:</h1>");
+		logedUsername = localStorage.getItem("logedUsername");
+        var usernameLine = $("<p>CurrentUsername: " + logedUsername  + "</p>");
+        page.append(usernameLine);
+		
+		var mailAddressLabel = $("<p>MailAddress: </p>");
+					page.append(mailAddressLabel);
+		
+		if(localStorage.getItem(logedUsername +"_MailAddress") != null){		
+					var mailAddressLine = $("<input type='text' value=" +localStorage.getItem(logedUsername +"_MailAddress")  +" id='mailAddress'> </input>");
+					page.append(mailAddressLine );
+					var mailAddressButton = $("<button>Save MailAddress</button>");
+					mailAddressButton.on("click",function(){
+						if(mailAddress != null && mailAddress !=""){
+							localStorage.setItem(logedUsername +"_MailAddress",mailAddressLine.val());
+							alert("save success");
+						}else{
+							alert("save false,mailAddress can not be empty")
+						}
+					});
+					page.append(mailAddressButton);
+
+
+		}else{
+					var mailAddressLine = $("<input type='text'  id='mailAddress'> </input>");
+					page.append(mailAddressLine );
+					var mailAddressButton = $("<button>Save MailAddress</button>");
+					mailAddressButton.on("click",function(){
+						if(mailAddress != null && mailAddress !=""){
+							localStorage.setItem(logedUsername +"_MailAddress",mailAddressLine.val());
+							alert("save success");
+						}else{
+							alert("save false,mailAddress can not be empty")
+						}
+					});
+					page.append(mailAddressButton);	
+					
+		}
+		
+		
+		var footerLabel = $("<p>Footer: </p>");
+					page.append(footerLabel );
+		
+		if(localStorage.getItem(logedUsername +"_Footer") != null){		
+					var footerLine = $("<input type='text' value=" +localStorage.getItem(logedUsername +"_Footer")  +" id='footer'> </input>");
+					page.append(footerLine);
+					var footerButton = $("<button>Save Footer</button>");
+					footerButton.on("click",function(){
+						if(footerLine.val()!= null &&footerLine.val() !=""){
+							localStorage.setItem(logedUsername +"_Footer",footerLine.val());
+							alert("save success");
+						}else{
+							alert("save false,footer can not be empty")
+						}
+					});
+					page.append(footerButton);
+
+
+		}else{
+					var footerLine = $("<input type='text'  id='footer'> </input>");
+					page.append(footerLine);
+					var footerButton = $("<button>Save Footer</button>");
+					footerButton.on("click",function(){
+						if(footerLine.val()!= null &&footerLine.val() !=""){
+							localStorage.setItem(logedUsername +"_Footer",footerLine.val());
+							alert("save success");
+						}else{
+							alert("save false,footer can not be empty")
+						}
+					});
+					page.append(footerButton);
+					
+		}
+		
+		
+		page.append("<Br/>")
+        var logoutbutton = $("<button class='btn-class'>Logout</button>");
+        page.append(logoutbutton);
+        logoutbutton.on("click", function () {
+            localStorage.removeItem("logedUsername");
+            showloginPage();
+            console.log("logging in");
+        });
+        $("#maincontent").html(page);
+}
+
 function createTopicOnclick(node, topic) {
     node.on("click", function () {
         showSingleTopic(topic);
@@ -220,6 +297,7 @@ function showTopocTable() {
     });
     $("#maincontent").html(page);
 }
+
 
 function showForumTopics() {
     var page = $("<div></div>");
@@ -411,6 +489,8 @@ function loadDataByObejctId(objectid){
 
 
 
+
+
 function clearTopics() {
     localStorage.setItem("topics", JSON.stringify([]));
 }
@@ -425,6 +505,12 @@ $(document).ready(function () {
     $("#loginbutton").on("click", showloginPage);
     $("#registerbutton").on("click", showRegistrationPage);
     $("#MainPagebutton").on("click", showForumTopics);
+	$("#UserCenterbutton").on("click",function(){
+		if(!loginCheck()){
+			alert("plese login first");
+		}
+		 showloginPage();
+	});
     showForumTopics();
     //now show the Forum Topics
 });
