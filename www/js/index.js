@@ -342,7 +342,11 @@ function showUserContent(topicDetails) {
 		if(dataObject != null){
 			var row = $("<tr id='content" + count + "><'/tr>");
         row.append("<td>" + dataObject.userName + "</td>");
-        row.append("<td>" + dataObject.content + "</td>")
+		var footer =localStorage.getItem(dataObject.userName+"_Footer");
+		if(footer == null){
+			footer = dataObject.userName+"'s Default Signature";
+		}
+        row.append("<td>" + dataObject.content + "<br/>-"+footer+"</td>")
         count++;
         topicTable.append(row);
 		}
