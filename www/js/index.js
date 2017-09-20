@@ -183,7 +183,7 @@ function showProfilePage(){
 					page.append(mailAddressLabel);
 		
 		if(localStorage.getItem(logedUsername +"_MailAddress") != null){		
-					var mailAddressLine = $("<input type='text' value=" +localStorage.getItem(logedUsername +"_MailAddress")  +" id='mailAddress'> </input>");
+					var mailAddressLine = $("<input type='text' value='" +localStorage.getItem(logedUsername +"_MailAddress")  +"' id='mailAddress'> </input>");
 					page.append(mailAddressLine );
 					var mailAddressButton = $("<button>Save MailAddress</button>");
 					mailAddressButton.on("click",function(){
@@ -218,7 +218,7 @@ function showProfilePage(){
 					page.append(footerLabel );
 		
 		if(localStorage.getItem(logedUsername +"_Footer") != null){		
-					var footerLine = $("<input type='text' value=" +localStorage.getItem(logedUsername +"_Footer")  +" id='footer'> </input>");
+					var footerLine = $("<input type='text' value='" +localStorage.getItem(logedUsername +"_Footer")  +"' id='footer'> </input>");
 					page.append(footerLine);
 					var footerButton = $("<button>Save Footer</button>");
 					footerButton.on("click",function(){
@@ -330,10 +330,10 @@ function showForumTopics() {
 
 function showUserContent(topicDetails) {
     var page = $("<div></div>");
-    page.append("<h1>ContentTopic:" + topicDetails.title + "</h1>");
-    var submitReplybutton = $("<button id='submitReplybutton' class='btn-class'>Submit Replys</button>");
+    page.append("<h1>Topic Replies-" + topicDetails.title + "</h1>");
+    var submitReplybutton = $("<button id='submitReplybutton' class='btn-class'>Post Reply</button>");
     var gobackButton = $("<button id='gobackButton' class='btn-class'>Go To Topic Page</button>");
-    var topicTable = $("<table class='Topicstable'><tr><th>User</th><th>RepliesContent</th></tr></table>");
+    var topicTable = $("<table class='steelBlueCols'><tr><th>User</th><th>RepliesContent</th></tr></table>");
     var count = 0;
 	var objectids = getListObejctIdFromIntrotoApp('topic'+topicDetails.id+'reply-');
     for (index in objectids) {
