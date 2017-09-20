@@ -57,7 +57,7 @@ var topicContent = [
     }
 ];
 //*****************************************************************
-// Functions To show login page and create login listener
+// Functions
 //*****************************************************************
 function showloginPage() {
     console.log("running showloginpage()");
@@ -100,7 +100,7 @@ function showloginPage() {
         $("#maincontent").html(page);
     }
 }
-//Login method-User login in the app and keep the login status
+//Login method
 function loginWithUserNameAndPassword(username, password) {
     console.log(localStorage.getItem(username));
     console.log(password);
@@ -114,7 +114,6 @@ function loginWithUserNameAndPassword(username, password) {
     }
 }
 
-//This method is to protect some methods that are required to login
 function loginCheck() {
     if (localStorage.getItem("logedUsername") == "-1" ||localStorage.getItem("logedUsername")==null) {
         showloginPage();
@@ -126,7 +125,6 @@ function loginCheck() {
 	
 }
 //**************************************************************************
-//Jump to Register Page
 // ******************************************************************************/
 function showRegistrationPage() {
     console.log("running showRegistrationPage()");
