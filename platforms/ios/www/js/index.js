@@ -166,7 +166,8 @@ function registorAction(username, password, confirmPassword) {
     localStorage.setItem(username, cryptoPassword);
     alert("regist success");
 }
-
+//this method is to show the user information 
+//user still can edit their footer and emailaddress in there
 function showProfilePage() {
     var page = $("<div></div>");
     page.append("<h1>Profiles:</h1>");
@@ -265,7 +266,7 @@ function createTopicContentOnclick(node, topic) {
         goToHomePage();
     });
 }
-
+//this methid is to show Registration page
 function showTopocTable() {
     console.log("running showRegistrationPage()");
     var page = $("<div></div>");
@@ -290,7 +291,7 @@ function showTopocTable() {
     });
     $("#maincontent").html(page);
 }
-
+//This method is to show forumTopic and add forum topoc in this page
 function showForumTopics() {
     var page = $("<div></div>");
     page.append("<h1 class='topictitle'>Add Content Here:</h1>");
@@ -319,7 +320,7 @@ function showForumTopics() {
     });
     $("#maincontent").html(page);
 }
-
+//This method will show the posted replies and can post reply from here 
 function showUserContent(topicDetails) {
     var page = $("<div></div>");
     page.append("<h1>Topic Replies-" + topicDetails.title + "</h1>");
@@ -382,6 +383,10 @@ function addTopic() {
     var title = $("#inputTitle").val();
     var posts = 0;
     var id;
+    if (title == null || title == "") {
+        alert("add topic failed,title should not be empty");
+        return;
+    }
     if (topics == null) {
         topics = [];
         id = 1;
@@ -398,7 +403,7 @@ function addTopic() {
     localStorage.setItem("topics", JSON.stringify(topics));
     showForumTopics();
 }
-
+//This page can edit the reply posted by current user
 function editPostPage(postObject, objectId, topicDetails) {
     var page = $("<div></div>");
     page.append("<h1>Edit Reply-" + postObject.userName + "</h1>");
@@ -445,7 +450,7 @@ function dateToString(now) {
     var dateTime = year + month + day + hour + minute + second;
     return dateTime;
 }
-
+//Make a method to save data to cloud server
 function saveDataToIntrotoApp(objectid, data, topicDetails) {
     var url = "http://introtoapps.com/datastore.php";
     var param = {
@@ -474,7 +479,7 @@ function saveDataToIntrotoApp(objectid, data, topicDetails) {
         }
     });
 }
-
+//Get objectid list  from cloud server
 function getListObejctIdFromIntrotoApp(prefix, suffix) {
     var url = "http://introtoapps.com/datastore.php";
     var param = {
@@ -498,7 +503,7 @@ function getListObejctIdFromIntrotoApp(prefix, suffix) {
     });
     return result;
 }
-
+//Make a method to recive content by an object id 
 function loadDataByObejctId(objectid) {
     var url = "http://introtoapps.com/datastore.php";
     var param = {
@@ -521,7 +526,7 @@ function loadDataByObejctId(objectid) {
     });
     return result;
 }
-
+//This page will show the reply posted by current user
 function showMyReplies(username) {
     var objectids = getListObejctIdFromIntrotoApp("", "." + username);
     var page = $("<div></div>");
