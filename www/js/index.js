@@ -44,7 +44,7 @@ app.initialize();
 // varlables
 //*****************************************************************
 var topics = [
- 
+
 ];
 var topicContent = [
     {
@@ -91,35 +91,31 @@ function showloginPage() {
 }
 //Login method-User login in the app and keep the login status
 function loginWithUserNameAndPassword(username, password) {
-   
-   
-   cryptoStoredPassword = localStorage.getItem(username);
-   if(   cryptoStoredPassword == null){
-		  alert("login failed,user name not registed");
-   }else{
-	   if (   cryptoStoredPassword.toString() == CryptoJS.SHA256(password).toString()) {
-        localStorage.setItem("logedUsername", username);
-        showForumTopics();
-        alert("login success");
+    cryptoStoredPassword = localStorage.getItem(username);
+    if (cryptoStoredPassword == null) {
+        alert("login failed,user name not registed");
     }
     else {
-        alert("login failed,username password not match");
+        if (cryptoStoredPassword.toString() == CryptoJS.SHA256(password).toString()) {
+            localStorage.setItem("logedUsername", username);
+            showForumTopics();
+            alert("login success");
+        }
+        else {
+            alert("login failed,username password not match");
+        }
     }
-   }
-   
-    
 }
-
 //This method is to protect some methods that are required to login
 function loginCheck() {
-    if (localStorage.getItem("logedUsername") == "-1" ||localStorage.getItem("logedUsername")==null) {
+    if (localStorage.getItem("logedUsername") == "-1" || localStorage.getItem("logedUsername") == null) {
         showloginPage();
-		alert("login required to do this operation");
-		return false;
-    }else{
-		return true;
-	}
-	
+        alert("login required to do this operation");
+        return false;
+    }
+    else {
+        return true;
+    }
 }
 //**************************************************************************
 //Jump to Register Page
@@ -166,98 +162,95 @@ function registorAction(username, password, confirmPassword) {
         alert("regist failed,password not match confirmPassword");
         return;
     }
-	cryptoPassword = CryptoJS.SHA256(password);
-
-    localStorage.setItem(username,cryptoPassword);
+    cryptoPassword = CryptoJS.SHA256(password);
+    localStorage.setItem(username, cryptoPassword);
     alert("regist success");
 }
 
-function showProfilePage(){
-	var page = $("<div></div>");
-        page.append("<h1>Profiles:</h1>");
-		logedUsername = localStorage.getItem("logedUsername");
-        var usernameLine = $("<p>CurrentUsername: " + logedUsername  + "</p>");
-        page.append(usernameLine);
-		
-		var mailAddressLabel = $("<p>MailAddress: </p>");
-					page.append(mailAddressLabel);
-		
-		if(localStorage.getItem(logedUsername +"_MailAddress") != null){		
-					var mailAddressLine = $("<input type='text' value='" +localStorage.getItem(logedUsername +"_MailAddress")  +"' id='mailAddress'> </input>");
-					page.append(mailAddressLine );
-					var mailAddressButton = $("<button>Save MailAddress</button>");
-					mailAddressButton.on("click",function(){
-						if(mailAddress != null && mailAddress !=""){
-							localStorage.setItem(logedUsername +"_MailAddress",mailAddressLine.val());
-							alert("save success");
-						}else{
-							alert("save false,mailAddress can not be empty")
-						}
-					});
-					page.append(mailAddressButton);
-
-
-		}else{
-					var mailAddressLine = $("<input type='text'  id='mailAddress'> </input>");
-					page.append(mailAddressLine );
-					var mailAddressButton = $("<button>Save MailAddress</button>");
-					mailAddressButton.on("click",function(){
-						if(mailAddress != null && mailAddress !=""){
-							localStorage.setItem(logedUsername +"_MailAddress",mailAddressLine.val());
-							alert("save success");
-						}else{
-							alert("save false,mailAddress can not be empty")
-						}
-					});
-					page.append(mailAddressButton);	
-					
-		}
-		
-		
-		var footerLabel = $("<p>Footer: </p>");
-					page.append(footerLabel );
-		
-		if(localStorage.getItem(logedUsername +"_Footer") != null){		
-					var footerLine = $("<input type='text' value='" +localStorage.getItem(logedUsername +"_Footer")  +"' id='footer'> </input>");
-					page.append(footerLine);
-					var footerButton = $("<button>Save Footer</button>");
-					footerButton.on("click",function(){
-						if(footerLine.val()!= null &&footerLine.val() !=""){
-							localStorage.setItem(logedUsername +"_Footer",footerLine.val());
-							alert("save success");
-						}else{
-							alert("save false,footer can not be empty")
-						}
-					});
-					page.append(footerButton);
-
-
-		}else{
-					var footerLine = $("<input type='text'  id='footer'> </input>");
-					page.append(footerLine);
-					var footerButton = $("<button>Save Footer</button>");
-					footerButton.on("click",function(){
-						if(footerLine.val()!= null &&footerLine.val() !=""){
-							localStorage.setItem(logedUsername +"_Footer",footerLine.val());
-							alert("save success");
-						}else{
-							alert("save false,footer can not be empty")
-						}
-					});
-					page.append(footerButton);
-					
-		}
-		
-		
-		page.append("<Br/>")
-        var logoutbutton = $("<button class='btn-class'>Logout</button>");
-        page.append(logoutbutton);
-        logoutbutton.on("click", function () {
-            localStorage.removeItem("logedUsername");
-            showloginPage();
-            console.log("logging in");
+function showProfilePage() {
+    var page = $("<div></div>");
+    page.append("<h1>Profiles:</h1>");
+    logedUsername = localStorage.getItem("logedUsername");
+    var usernameLine = $("<p>CurrentUsername: " + logedUsername + "</p>");
+    page.append(usernameLine);
+    var mailAddressLabel = $("<p>MailAddress: </p>");
+    page.append(mailAddressLabel);
+    if (localStorage.getItem(logedUsername + "_MailAddress") != null) {
+        var mailAddressLine = $("<input type='text' value='" + localStorage.getItem(logedUsername + "_MailAddress") + "' id='mailAddress'> </input>");
+        page.append(mailAddressLine);
+        var mailAddressButton = $("<button>Save MailAddress</button>");
+        mailAddressButton.on("click", function () {
+            if (mailAddress != null && mailAddress != "") {
+                localStorage.setItem(logedUsername + "_MailAddress", mailAddressLine.val());
+                alert("save success");
+            }
+            else {
+                alert("save false,mailAddress can not be empty")
+            }
         });
-        $("#maincontent").html(page);
+        page.append(mailAddressButton);
+    }
+    else {
+        var mailAddressLine = $("<input type='text'  id='mailAddress'> </input>");
+        page.append(mailAddressLine);
+        var mailAddressButton = $("<button>Save MailAddress</button>");
+        mailAddressButton.on("click", function () {
+            if (mailAddress != null && mailAddress != "") {
+                localStorage.setItem(logedUsername + "_MailAddress", mailAddressLine.val());
+                alert("save success");
+            }
+            else {
+                alert("save false,mailAddress can not be empty")
+            }
+        });
+        page.append(mailAddressButton);
+    }
+    var footerLabel = $("<p>Footer: </p>");
+    page.append(footerLabel);
+    if (localStorage.getItem(logedUsername + "_Footer") != null) {
+        var footerLine = $("<input type='text' value='" + localStorage.getItem(logedUsername + "_Footer") + "' id='footer'> </input>");
+        page.append(footerLine);
+        var footerButton = $("<button>Save Footer</button>");
+        footerButton.on("click", function () {
+            if (footerLine.val() != null && footerLine.val() != "") {
+                localStorage.setItem(logedUsername + "_Footer", footerLine.val());
+                alert("save success");
+            }
+            else {
+                alert("save false,footer can not be empty")
+            }
+        });
+        page.append(footerButton);
+    }
+    else {
+        var footerLine = $("<input type='text'  id='footer'> </input>");
+        page.append(footerLine);
+        var footerButton = $("<button>Save Footer</button>");
+        footerButton.on("click", function () {
+            if (footerLine.val() != null && footerLine.val() != "") {
+                localStorage.setItem(logedUsername + "_Footer", footerLine.val());
+                alert("save success");
+            }
+            else {
+                alert("save false,footer can not be empty")
+            }
+        });
+        page.append(footerButton);
+    }
+    page.append("<Br/>")
+    var logoutbutton = $("<button class='btn-class'>Logout</button>");
+    page.append(logoutbutton);
+    logoutbutton.on("click", function () {
+        localStorage.removeItem("logedUsername");
+        showloginPage();
+        console.log("logging in");
+    });
+    var myrepliesbutton = $("<button class='btn-class'>My replies</button>");
+    page.append(myrepliesbutton);
+    myrepliesbutton.on("click", function () {
+        showMyReplies(logedUsername);
+    });
+    $("#maincontent").html(page);
 }
 
 function createTopicOnclick(node, topic) {
@@ -298,7 +291,6 @@ function showTopocTable() {
     $("#maincontent").html(page);
 }
 
-
 function showForumTopics() {
     var page = $("<div></div>");
     page.append("<h1 class='topictitle'>Add Content Here:</h1>");
@@ -310,20 +302,20 @@ function showForumTopics() {
         console.log(topics[index].title);
         var row = $("<tr id='row" + count + "><'/tr>");
         row.append("<td>" + topics[index].title + "</td>");
-        row.append("<td>" + topics[index].posts + "</td>");
+        var objectids = getListObejctIdFromIntrotoApp('topic' + topics[index].id + topics[index].title + 'reply-');
+        row.append("<td>" + objectids.length + "</td>");
         createTopicOnclick(row, topics[index]);
         count++;
         topicTable.append(row);
     }
     page.append(topicTable);
-    page.append("<label>Topic Title:</></br>")
-    page.append("<input id='inputTitle'/></br>");
+    page.append("<label>Input Topic Title Here:</></br>")
+    page.append("<input style='width:50%' id='inputTitle'/></br>");
     page.append(submitbutton);
     submitbutton.on("click", function () {
-		if(loginCheck()){
-		 addTopic();
-		}
-		
+        if (loginCheck()) {
+            addTopic();
+        }
     });
     $("#maincontent").html(page);
 }
@@ -335,53 +327,50 @@ function showUserContent(topicDetails) {
     var gobackButton = $("<button id='gobackButton' class='btn-class'>Go To Topic Page</button>");
     var topicTable = $("<table class='steelBlueCols'><tr><th>User</th><th>RepliesContent</th><th>Operation</th></tr></table>");
     var count = 0;
-	var objectids = getListObejctIdFromIntrotoApp('topic'+topicDetails.id+'reply-');
+    var objectids = getListObejctIdFromIntrotoApp('topic' + topicDetails.id + topicDetails.title + 'reply-');
     for (index in objectids) {
         console.log(loadDataByObejctId(objectids[index]));
-		var dataObject = JSON.parse(loadDataByObejctId(objectids[index]));
-		if(dataObject != null){
-			var row = $("<tr id='content" + count + "><'/tr>");
-        row.append("<td>" + dataObject.userName + "</td>");
-		var footer =localStorage.getItem(dataObject.userName+"_Footer");
-		if(footer == null){
-			footer = dataObject.userName+"'s Default Signature";
-		}
-        row.append("<td>" + dataObject.content + "<br/>-"+footer+"</td>")
-		var editButton = $("<button class='btn-class-smaller' >edit</button>")
-		if(dataObject.userName == localStorage.getItem("logedUsername")){
-			console.log("equals");
-			row.append(editButton);
-			editButton.on("click",function(){
-			});
-		}
-        
-		}else{
-			console.log("not equals");
-		}
-		
+        var dataObject = JSON.parse(loadDataByObejctId(objectids[index]));
+        if (dataObject != null) {
+            var row = $("<tr id='content" + count + "><'/tr>");
+            row.append("<td>" + dataObject.userName + "</td>");
+            var footer = localStorage.getItem(dataObject.userName + "_Footer");
+            if (footer == null) {
+                footer = dataObject.userName + "'s Default Signature";
+            }
+            row.append("<td>" + dataObject.content + "<br/>-" + footer + "</td>")
+            var editButton = $("<button class='btn-class-smaller' >edit</button>")
+            if (dataObject.userName == localStorage.getItem("logedUsername")) {
+                console.log("equals");
+                row.append(editButton);
+                editButton.on("click", function () {
+                    editPostPage(dataObject, objectids[index], topicDetails);
+                });
+            }
+        }
+        else {
+            console.log("not equals");
+        }
         count++;
         topicTable.append(row);
-		
-      
     }
     page.append(topicTable);
-    page.append("<label>Reply Content:</></br>")
-    page.append("<input id='inputReplyContent'/></br>");
+    page.append("<label>Input Reply Content Here:</></br>")
+    page.append("<input style='width:100%' id='inputReplyContent'/></br>");
     page.append(submitReplybutton);
     page.append(gobackButton);
     $("#maincontent").html(page);
     $("#gobackButton").on("click", showForumTopics);
-	$("#submitReplybutton").on("click",function(){
-		if(loginCheck()){
-		var topicContent = new Object();
-		topicContent.userName = localStorage.getItem("logedUsername");
-		topicContent.content = $("#inputReplyContent").val();
-		var timestam= dateToString(new Date());
-		console.log(timestam);
-		saveDataToIntrotoApp('topic'+topicDetails.id+'reply-'+topicContent.userName+timestam,JSON.stringify(topicContent),topicDetails);
-		}
-		
-	});
+    $("#submitReplybutton").on("click", function () {
+        if (loginCheck()) {
+            var topicContent = new Object();
+            topicContent.userName = localStorage.getItem("logedUsername");
+            topicContent.content = $("#inputReplyContent").val();
+            var timestam = dateToString(new Date());
+            console.log(timestam);
+            saveDataToIntrotoApp('topic' + topicDetails.id + topicDetails.title + 'reply-' + timestam + "." + topicContent.userName, JSON.stringify(topicContent), topicDetails);
+        }
+    });
 }
 //*******************************************************************************************
 //*******************************************************************************************
@@ -392,135 +381,173 @@ function showSingleTopic(topicDetails) {
 function addTopic() {
     var title = $("#inputTitle").val();
     var posts = 0;
-	var id;
-	
-
+    var id;
     if (topics == null) {
-		topics = [];
+        topics = [];
         id = 1;
-    }else{
-		lastId = topics[topics.length-1].id;
-		id = lastId + 1;
-	}
-        topics.push({
-            title: title
-            , posts: posts
-            , id: id
-        });
+    }
+    else {
+        lastId = topics[topics.length - 1].id;
+        id = lastId + 1;
+    }
+    topics.push({
+        title: title
+        , posts: posts
+        , id: id
+    });
     localStorage.setItem("topics", JSON.stringify(topics));
     showForumTopics();
 }
 
-
-function editPostPage(postObject){
-	var page = $("<div></div>");
-	page.append("<h1>Edit Reply-" + postObject.userName + "</h1>");
-	page.append("<label>Reply content:</label>")
-	var inputText = $("<input></input>");
-	page.append(inputText);
-	var updateButton = $("<button style='background:green;position:fixed;left:20px;bottom:20px'>Update</button>");
-	page.append(updateButton);
-	var cancleButton = $("<button style='background: #800600;position: fixed;left: 100px;bottom: 20px;'>Cancle</button>");
-	page.append(cancleButton);
-	 $("#maincontent").html(page);
+function editPostPage(postObject, objectId, topicDetails) {
+    var page = $("<div></div>");
+    page.append("<h1>Edit Reply-" + postObject.userName + "</h1>");
+    page.append("<label>Reply content:</label>")
+    var inputText = $("<input style='width:100%'></input>");
+    inputText.val(postObject.content);
+    page.append(inputText);
+    var updateButton = $("<button style='background:green;left:20px;bottom:20px'>Update</button>");
+    updateButton.on("click", function () {
+        postObject.content = inputText.val();
+        saveDataToIntrotoApp(objectId, JSON.stringify(postObject), topicDetails);
+    });
+    page.append(updateButton);
+    var cancleButton = $("<button style='background: #800600;left: 100px;bottom: 20px;'>Cancle</button>");
+    cancleButton.on("click", function () {
+        showUserContent(topicDetails);
+    });
+    page.append(cancleButton);
+    $("#maincontent").html(page);
 }
-
-
 //Transfer the datatime object to String
-function dateToString(now){  
-    var year = now.getFullYear();  
-    var month =(now.getMonth() + 1).toString();  
-    var day = (now.getDate()).toString();  
-    var hour = (now.getHours()).toString();  
-    var minute = (now.getMinutes()).toString();  
-    var second = (now.getSeconds()).toString();  
-    if (month.length == 1) {  
-        month = "0" + month;  
-    }  
-    if (day.length == 1) {  
-        day = "0" + day;  
-    }  
-    if (hour.length == 1) {  
-        hour = "0" + hour;  
-    }  
-    if (minute.length == 1) {  
-        minute = "0" + minute;  
-    }  
-    if (second.length == 1) {  
-        second = "0" + second;  
-    }  
-     var dateTime = year +  month +  day + hour +minute+second;  
-     return dateTime;  
-  }  
-
-
-function  saveDataToIntrotoApp(objectid,data,topicDetails){
-	var url = "http://introtoapps.com/datastore.php";
-	var param = {objectid:objectid,data:data,appid:'214077752',action:'save'};
-	jQuery.ajax({
-                                        type: "GET",
-                                        url: url,
-                                        data:param,
-                                        error: function () {
-                                            alert("network false");
-                                        },
-                                        success: function (data) {
-											if(data == 'ok'){
-												topicDetails.posts +=1;
-												localStorage.setItem("topics",JSON.stringify(topics));
-												alert("reply success,page is refreshing");
-												showUserContent(topicDetails);
-											}else{
-												alert("reply failed");
-											}
-
-                                        }
-                                    });
+function dateToString(now) {
+    var year = now.getFullYear();
+    var month = (now.getMonth() + 1).toString();
+    var day = (now.getDate()).toString();
+    var hour = (now.getHours()).toString();
+    var minute = (now.getMinutes()).toString();
+    var second = (now.getSeconds()).toString();
+    if (month.length == 1) {
+        month = "0" + month;
+    }
+    if (day.length == 1) {
+        day = "0" + day;
+    }
+    if (hour.length == 1) {
+        hour = "0" + hour;
+    }
+    if (minute.length == 1) {
+        minute = "0" + minute;
+    }
+    if (second.length == 1) {
+        second = "0" + second;
+    }
+    var dateTime = year + month + day + hour + minute + second;
+    return dateTime;
 }
 
-
-function getListObejctIdFromIntrotoApp(prefix){
-	var url = "http://introtoapps.com/datastore.php";
-	var param = {prefix:prefix,appid:'214077752',action:'listall'};
-	var result = [];
-	jQuery.ajax({
-                                        type: "GET",
-                                        url: url,
-                                        data:param,
-										async: false,
-                                        error: function () {
-                                            alert("network false");
-                                        },
-                                        success: function (data) {
-											result = data;
-                                        }
-                                    });
-	return result;
+function saveDataToIntrotoApp(objectid, data, topicDetails) {
+    var url = "http://introtoapps.com/datastore.php";
+    var param = {
+        objectid: objectid
+        , data: data
+        , appid: '214077752'
+        , action: 'save'
+    };
+    jQuery.ajax({
+        type: "GET"
+        , url: url
+        , data: param
+        , error: function () {
+            alert("network false");
+        }
+        , success: function (data) {
+            if (data == 'ok') {
+                topicDetails.posts += 1;
+                localStorage.setItem("topics", JSON.stringify(topics));
+                alert("reply success,page is refreshing");
+                showUserContent(topicDetails);
+            }
+            else {
+                alert("reply failed");
+            }
+        }
+    });
 }
 
-
-function loadDataByObejctId(objectid){
-	var url = "http://introtoapps.com/datastore.php";
-	var param = {objectid:objectid,appid:'214077752',action:'load'};
-	var result;
-	 jQuery.ajax({
-                                        type: "GET",
-                                        url: url,
-                                        data:param,
-										async: false,
-                                        error: function () {
-                                            alert("network false");
-                                        },
-                                        success: function (data) {
-											result = data;
-                                        }
-                                    });
-	return result;
+function getListObejctIdFromIntrotoApp(prefix, suffix) {
+    var url = "http://introtoapps.com/datastore.php";
+    var param = {
+        prefix: prefix
+        , appid: '214077752'
+        , action: 'listall'
+        , suffix: suffix
+    };
+    var result = [];
+    jQuery.ajax({
+        type: "GET"
+        , url: url
+        , data: param
+        , async: false
+        , error: function () {
+            alert("network false");
+        }
+        , success: function (data) {
+            result = data;
+        }
+    });
+    return result;
 }
 
+function loadDataByObejctId(objectid) {
+    var url = "http://introtoapps.com/datastore.php";
+    var param = {
+        objectid: objectid
+        , appid: '214077752'
+        , action: 'load'
+    };
+    var result;
+    jQuery.ajax({
+        type: "GET"
+        , url: url
+        , data: param
+        , async: false
+        , error: function () {
+            alert("network false");
+        }
+        , success: function (data) {
+            result = data;
+        }
+    });
+    return result;
+}
 
-
-
+function showMyReplies(username) {
+    var objectids = getListObejctIdFromIntrotoApp("", "." + username);
+    var page = $("<div></div>");
+    page.append("<h1>" + username + "'s replies</h1>");
+    var topicTable = $("<table class='steelBlueCols'><tr><th>Reply information</th><th>RepliesContent</th></tr></table>");
+    for (index in objectids) {
+        var dataObject = JSON.parse(loadDataByObejctId(objectids[index]));
+        if (dataObject != null) {
+            var row = $("<tr></tr>");
+            row.append("<td>" + objectids[index] + "</td>");
+            var footer = localStorage.getItem(dataObject.userName + "_Footer");
+            if (footer == null) {
+                footer = dataObject.userName + "'s Default Signature";
+            }
+            row.append("<td>" + dataObject.content + "<br/>-" + footer + "</td>")
+            topicTable.append(row);
+        }
+    }
+    page.append(topicTable);
+    var usercenterbutton = $("<button class='btn-class'>User Center</button>");
+    usercenterbutton.on("click", function () {
+        showProfilePage();
+    });
+    page.append(usercenterbutton);
+    $("#maincontent").html(page);
+}
 
 function clearTopics() {
     localStorage.setItem("topics", JSON.stringify([]));
@@ -536,12 +563,12 @@ $(document).ready(function () {
     $("#loginbutton").on("click", showloginPage);
     $("#registerbutton").on("click", showRegistrationPage);
     $("#MainPagebutton").on("click", showForumTopics);
-	$("#UserCenterbutton").on("click",function(){
-		if(!loginCheck()){
-			alert("plese login first");
-		}
-		 showloginPage();
-	});
+    $("#UserCenterbutton").on("click", function () {
+        if (!loginCheck()) {
+            alert("plese login first");
+        }
+        showloginPage();
+    });
     showForumTopics();
     //now show the Forum Topics
 });
