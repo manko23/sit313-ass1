@@ -333,7 +333,7 @@ function showUserContent(topicDetails) {
     page.append("<h1>Topic Replies-" + topicDetails.title + "</h1>");
     var submitReplybutton = $("<button id='submitReplybutton' class='btn-class'>Post Reply</button>");
     var gobackButton = $("<button id='gobackButton' class='btn-class'>Go To Topic Page</button>");
-    var topicTable = $("<table class='steelBlueCols'><tr><th>User</th><th>RepliesContent</th></tr></table>");
+    var topicTable = $("<table class='steelBlueCols'><tr><th>User</th><th>RepliesContent</th><th>Operation</th></tr></table>");
     var count = 0;
 	var objectids = getListObejctIdFromIntrotoApp('topic'+topicDetails.id+'reply-');
     for (index in objectids) {
@@ -347,11 +347,22 @@ function showUserContent(topicDetails) {
 			footer = dataObject.userName+"'s Default Signature";
 		}
         row.append("<td>" + dataObject.content + "<br/>-"+footer+"</td>")
-        count++;
-        topicTable.append(row);
+		var editButton = $("<button class='btn-class-smaller' >edit</button>")
+		if(dataObject.userName == localStorage.getItem("logedUsername")){
+			console.log("equals");
+			row.append(editButton);
+			editButton.on("click",function(){
+			});
 		}
         
-        $("#maincontent").html(page);
+		}else{
+			console.log("not equals");
+		}
+		
+        count++;
+        topicTable.append(row);
+		
+      
     }
     page.append(topicTable);
     page.append("<label>Reply Content:</></br>")
@@ -400,6 +411,22 @@ function addTopic() {
     showForumTopics();
 }
 
+
+function editPostPage(postObject){
+	var page = $("<div></div>");
+	page.append("<h1>Edit Reply-" + postObject.userName + "</h1>");
+	page.append("<label>Reply content:</label>")
+	var inputText = $("<input></input>");
+	page.append(inputText);
+	var updateButton = $("<button style='background:green;position:fixed;left:20px;bottom:20px'>Update</button>");
+	page.append(updateButton);
+	var cancleButton = $("<button style='background: #800600;position: fixed;left: 100px;bottom: 20px;'>Cancle</button>");
+	page.append(cancleButton);
+	 $("#maincontent").html(page);
+}
+
+
+//Transfer the datatime object to String
 function dateToString(now){  
     var year = now.getFullYear();  
     var month =(now.getMonth() + 1).toString();  
